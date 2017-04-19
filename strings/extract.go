@@ -62,3 +62,40 @@ func SymExstact(src string, sym1, sym2 string) ([]string, error) {
 
 	return result, nil
 }
+
+// DouExstact 标准截取. 从src中按照指定的sym进行截取sym之间的字符
+// 例如从#ABC#abc#DEF#中截取出 ABC和DEF
+func DouExstact(src string, sym string) ([]string, error) {
+	count := strings.Count(src, sym)
+
+	if count == 1 {
+		return nil, errors.New("The src string must have more than one split char")
+	}
+
+	var result []string
+
+	isSym := true
+	ids1 := strings.Index(src, sym)
+	sub := src[ids1+1:]
+
+	for {
+		if !strings.Contains(sub, sym) {
+			break
+		}
+
+		ids2 := strings.Index(sub, sym)
+		if isSym {
+			str := sub[:ids2]
+			sub = sub[ids2+1:]
+
+			result = append(result, str)
+			isSym = !isSym
+		} else {
+			sub = sub[ids2+1:]
+			isSym = !isSym
+		}
+
+	}
+	return result, nil
+
+}
