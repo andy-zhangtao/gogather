@@ -23,3 +23,10 @@ func Benchmark_bubbleSort(b *testing.B) {
 	b.StartTimer()
 	BubbleSort(data)
 }
+
+func ExampleBubbleSort() {
+	// declare a array
+	// this array must implenet sort.Inerface
+	data := sort.IntSlice{22, 34, 3, 40, 18, 4}
+	BubbleSort(data)
+}

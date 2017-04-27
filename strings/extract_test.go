@@ -1,6 +1,7 @@
 package strings
 
 import (
+	"log"
 	"strings"
 	"testing"
 )
@@ -138,4 +139,25 @@ func Benchmark_SymExstact(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		SymExstact(src, "{", "}")
 	}
+}
+
+func ExampleSymExstact() {
+	src := "{ABC}abc{DEF}jhi"
+	sub, err := SymExstact(src, "{", "}")
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	log.Println(sub)
+}
+
+func ExampleDouExstact() {
+	src := "#ABC#DEF#HHH#eee"
+
+	sub, err := DouExstact(src, "#")
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	log.Println(sub)
 }
