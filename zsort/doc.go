@@ -7,7 +7,5 @@
 			2. 快速排序 quick_sort。
 */
 
-// Copyright 2017 Andy. All rights reserved.
-// Use of this source code is governed by a BSD-style
-// license that can be found in the LICENSE file.
+// Andy开发，对无序数据进行排序
 package zsort

@@ -7,7 +7,5 @@
 			2. 按照指定字符截取
 */
 
-// Copyright 2017 Andy. All rights reserved.
-// Use of this source code is governed by a BSD-style
-// license that can be found in the LICENSE file.
+// Andy开发，可以完成针对字符串的高级操作
 package strings
