@@ -4,6 +4,7 @@ import (
 	"log"
 	"strings"
 	"testing"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestStdSymExstact(t *testing.T) {
@@ -160,4 +161,13 @@ func ExampleDouExstact() {
 	}
 
 	log.Println(sub)
+}
+
+func TestRemoveMultipeSpace(t *testing.T) {
+	oldStr := "str1    str2      str3      str4     str5"
+	str := RemoveMultipeSpace(oldStr)
+	r := "str1 str2 str3 str4 str5"
+	assert.Equal(t, r, str, "They should be equal")
+	strs := strings.Split(str, " ")
+	assert.Equal(t, 5, len(strs), "The length of strs should be 5")
 }

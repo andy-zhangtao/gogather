@@ -3,6 +3,8 @@ package random
 import (
 	"testing"
 	"strconv"
+	"github.com/stretchr/testify/assert"
+	"strings"
 )
 
 func TestGetString(t *testing.T) {
@@ -40,3 +42,4 @@ func TestGetRandom(t *testing.T) {
 		t.Error("Random String Generate Number Error!")
 	}
 }
+

@@ -3,6 +3,7 @@ package random
 import (
 	"math/rand"
 	"time"
+	"regexp"
 )
 
 var letterRunes = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
@@ -10,7 +11,7 @@ var numbers = []rune("012456789")
 
 // GetString 获取指定长度的随机字符串
 // size 字符串的长度
-func GetString(size int) string{
+func GetString(size int) string {
 	rand.Seed(time.Now().UnixNano())
 	b := make([]rune, size)
 	for i := range b {

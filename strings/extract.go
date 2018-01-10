@@ -3,6 +3,7 @@ package strings
 import (
 	"errors"
 	"strings"
+	"regexp"
 )
 
 // SymExstact 对称截取. 从src中截取sym1与sym2之间的字符
@@ -98,4 +99,14 @@ func DouExstact(src string, sym string) ([]string, error) {
 	}
 	return result, nil
 
+}
+
+
+// RemoveMultipeSpace 去除字符串中多余的空格
+func RemoveMultipeSpace(oldStr string) (newStr string) {
+	re_leadclose_whtsp := regexp.MustCompile(`^[\s\p{Zs}]+|[\s\p{Zs}]+$`)
+	re_inside_whtsp := regexp.MustCompile(`[\s\p{Zs}]{2,}`)
+	final := re_leadclose_whtsp.ReplaceAllString(oldStr, "")
+	newStr = re_inside_whtsp.ReplaceAllString(final, " ")
+	return
 }
