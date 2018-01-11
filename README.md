@@ -1,5 +1,5 @@
 # gather
-一些有用的工具包 API文档请点击[https://golang.chinazt.cc/pkg/](https://golang.chinazt.cc/pkg/)
+一些有用的工具包 API文档请点击[![GoDoc](https://godoc.org/github.com/andy-zhangtao/gogather?status.svg)](https://godoc.org/github.com/andy-zhangtao/gogather)
 
 ## strings
 处理字符串的工具包.
@@ -43,5 +43,5 @@
 - 查找合法的Json字符串
 
 目前已经实现如下随机函数:
- 
+
 - 生成指定长度的时间戳
