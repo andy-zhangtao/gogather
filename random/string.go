@@ -3,7 +3,6 @@ package random
 import (
 	"math/rand"
 	"time"
-	"regexp"
 )
 
 var letterRunes = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
