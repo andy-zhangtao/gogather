@@ -3,6 +3,8 @@ package tools
 import (
 	"testing"
 	"os"
+	"github.com/stretchr/testify/assert"
+
 )
 
 //Write by zhangtao<ztao8607@gmail.com> . In 2018/3/12.
@@ -18,7 +20,5 @@ func TestEmail_SendEmail(t *testing.T) {
 	}
 
 	err := e.SendEmail()
-	if err != nil {
-		t.Error(err)
-	}
+	assert.EqualError(t,err,"Host Or UserName Or PassWord is NULL")
 }
