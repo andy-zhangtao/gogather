@@ -52,3 +52,8 @@
 工具类函数
 
 - email 发送电子邮件
+
+## crypto
+加密类函数
+
+- GeneratePassword 生成与Django兼容的加密字符串
