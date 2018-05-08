@@ -9,10 +9,9 @@ import (
 
 //Write by zhangtao<ztao8607@gmail.com> . In 2018/5/7.
 // GeneratePasswd 生成与Django兼容的加密字符串
-func GeneratePasswd(password, userSalt string) (cryptoPasswd string) {
+func GeneratePasswd(password, userSalt string, iterations int) (cryptoPasswd string) {
 	pwd := []byte(password)  // 用户设置的原始密码
 	salt := []byte(userSalt) // 盐，是一个随机字符串，每一个用户都不一样，在这里我们随机选择 "I1lrI7wqJOJZ" 作为盐
-	iterations := 36000      // 加密算法的迭代次数，15000 次
 	digest := sha256.New     // digest 算法，使用 sha256
 
 	// 第一步：使用 pbkdf2 算法加密
