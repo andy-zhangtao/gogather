@@ -1,59 +1,17 @@
 # gather
 一些有用的工具包 API文档请点击[![GoDoc](https://godoc.org/github.com/andy-zhangtao/gogather?status.svg)](https://godoc.org/github.com/andy-zhangtao/gogather)
 
-## strings
-处理字符串的工具包.
+## [strings](./strings.md)
 
-目前已经实现的功能有:
+## [zsort](./zsort.md)
 
-- 对称截取
-- 按照指定字符截取
-- 按照指定分隔符进行反转
-- 按照指定分隔符进行反转同时替换为新分隔符
-- 去除字符串中的多余空格
+## [random](./random.md)
 
-## zsort
-数组排序算法包.
+## [time](./time.md)
 
-目前已经实现的排序算法有:
+## [convert](./convert.md)
 
-- 冒泡排序
-- 快速排序
-- 选择排序
+## [tools](./tools.md)
 
-其它排序方式:
+## [crypto](./crypto.md)
 
-- 字典排序
-- 按照Map Value进行排序
-
-## random
-生成随机数
-
-目前已经实现如下随机函数:
-
-- 随机字符串
-- 随机数字字符串
-
-## time
-时间有关函数
-- 获取指定日期在当月的天数
-- 获取指定日期在当年的天数
-
-## convert
-转换类函数
-
-- 查找合法的Json字符串
-
-目前已经实现如下随机函数:
-
-- 生成指定长度的时间戳
-
-## tools
-工具类函数
-
-- email 发送电子邮件
-
-## crypto
-加密类函数
-
-- GeneratePassword 生成与Django兼容的加密字符串
