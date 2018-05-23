@@ -14,6 +14,10 @@ func ReflectStructInfo(u interface{}) (structInfo map[string]interface{}) {
 
 	getValue := reflect.ValueOf(u)
 
+	if getType.Kind() == reflect.Ptr {
+		return parseStruct(getType.Elem(), getValue.Elem())
+	}
+
 	return parseStruct(getType, getValue)
 
 }
