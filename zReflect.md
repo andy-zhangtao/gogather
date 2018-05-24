@@ -47,6 +47,6 @@ User中的Projects同样是一个struct, 因此ID会被解析为 projects.id
 #### func  ReflectStructInfoWithTag
 
 ```go
-func ReflectStructInfoWithTag(u interface{}, tag string, key ...string) (structInfo map[string]interface{})
+func ReflectStructInfoWithTag(u interface{}, allowEmpty bool, tag string, key ...string) (structInfo map[string]interface{})
 ```
 ReflectStructInfoWithTag 抽取特定标签的非空字段 使用方式同ReflectStructInfo一致, 只增加了Tag属性

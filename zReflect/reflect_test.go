@@ -70,7 +70,7 @@ func TestReflectStructInfoWithTag(t *testing.T) {
 		CurrentAuthority: "dev",
 	}
 
-	structInfo := ReflectStructInfoWithTag(u, "bw")
+	structInfo := ReflectStructInfoWithTag(u, true,"bw")
 
 	assert.Equal(t, "andy@gmail.com", structInfo["name"])
 	assert.Equal(t, "pbkdf2_sha256$12000$sYPLrXcUlw0r$lNZsiNWBHS/9DUNsYvKYtL1UjxUPv+IKaYJ5JMJtz9U=", structInfo["password"])
