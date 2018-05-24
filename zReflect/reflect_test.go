@@ -50,7 +50,7 @@ func TestReflectStructInfo(t *testing.T) {
 
 	assert.Equal(t, "andy@gmail.com", structInfo["name"])
 	assert.Equal(t, "pbkdf2_sha256$12000$sYPLrXcUlw0r$lNZsiNWBHS/9DUNsYvKYtL1UjxUPv+IKaYJ5JMJtz9U=", structInfo["password"])
-	assert.Equal(t, "iddd", structInfo["projects"].(Project).ID[0])
-	assert.Equal(t, 4, structInfo["statis"].(UserStatis).DeployFailed)
+	assert.Equal(t, "iddd", structInfo["projects.id"].([]string)[0])
+	assert.Equal(t, 4, structInfo["statis.deployfailed"].(int))
 	assert.Equal(t, "dev", structInfo["currentauthority"])
 }
