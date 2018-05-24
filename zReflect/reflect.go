@@ -46,30 +46,50 @@ func ReflectStructInfo(u interface{}, key ...string) (structInfo map[string]inte
 	getValue := reflect.ValueOf(u)
 
 	if getType.Kind() == reflect.Ptr {
-		return parseStruct(getType.Elem(), getValue.Elem(), key...)
+		return parseStruct(getType.Elem(), getValue.Elem(), false, "bson", key...)
 	}
 
-	return parseStruct(getType, getValue, key...)
+	return parseStruct(getType, getValue, false, "bson", key...)
 
 }
 
-func parseStruct(u reflect.Type, v reflect.Value, key ...string) (structInfo map[string]interface{}) {
+//ReflectStructInfoWithTag 抽取特定标签的非空字段
+//使用方式同ReflectStructInfo一致, 只增加了Tag属性
+func ReflectStructInfoWithTag(u interface{}, allowEmpty bool, tag string, key ...string) (structInfo map[string]interface{}) {
+
+	getType := reflect.TypeOf(u)
+
+	getValue := reflect.ValueOf(u)
+
+	if getType.Kind() == reflect.Ptr {
+		return parseStruct(getType.Elem(), getValue.Elem(), allowEmpty, tag, key...)
+	}
+
+	return parseStruct(getType, getValue, allowEmpty, tag, key...)
+
+}
+
+func parseStruct(u reflect.Type, v reflect.Value, allowEmpty bool, tag string, key ...string) (structInfo map[string]interface{}) {
 
 	structInfo = make(map[string]interface{})
 	for i := 0; i < u.NumField(); i++ {
 		field := u.Field(i)
 		value := v.Field(i)
 		zero := reflect.Zero(field.Type)
-		bName := field.Tag.Get("bson")
+		bName := field.Tag.Get(tag)
 		if bName == "" {
-			bName = field.Name
+			continue
+		}
+
+		if bName == "-" {
+			continue
 		}
 
 		if len(key) > 0 {
 			bName = key[0] + bName
 		}
 
-		if !reflect.DeepEqual(zero.Interface(), value.Interface()) {
+		if !reflect.DeepEqual(zero.Interface(), value.Interface()) || allowEmpty {
 			switch reflect.TypeOf(value.Interface()).Kind() {
 			case reflect.String:
 				fallthrough
