@@ -18,6 +18,16 @@ type Zlog struct {
 ```go
 func GetZlog() *Zlog
 ```
+GetZlog 获取跟踪ID实例
+
+##### Example
+
+```go
+
+    z := zlog.GetZlog()
+    logrus.WithFields(z.Fields(logrus.Fields{"key": value})).Info("main")
+
+```
 
 #### func (*Zlog) AddID
 

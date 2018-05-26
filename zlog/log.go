@@ -9,6 +9,19 @@ type Zlog struct {
 	idMap map[int64]string
 }
 
+//GetZlog 获取跟踪ID实例
+/*
+
+##### Example
+
+```go
+
+	z := zlog.GetZlog()
+	logrus.WithFields(z.Fields(logrus.Fields{"key": value})).Info("main")
+
+```
+
+*/
 func GetZlog() (*Zlog) {
 	return &Zlog{
 		idMap: make(map[int64]string),
