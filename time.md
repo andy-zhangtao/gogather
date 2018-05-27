@@ -5,6 +5,14 @@
 
 ## Usage
 
+```go
+const (
+	OnDay = iota
+	OnHour
+	OnMin
+)
+```
+
 #### func  GetCurrentDayOfMonth
 
 ```go
@@ -24,6 +32,43 @@ func GetCurrentDayOfYear(t time.Time) (day int, err error)
 func GetTimeStamp(length int) string
 ```
 GetTimeStamp 获取当前时间戳 length 10:获取秒 13:获取毫秒
+
+#### func  OnTimer
+
+```go
+func OnTimer(kind, duration int, callback func() error) chan error
+```
+OnTimer 定时发生器 OnDay 每天零时执行callback OnHour 每个小时执行callback OnMin 每分钟执行callback
+如果执行过程出现error, 则通过chan error获取具体错误原因
+
+##### Example
+
+```go //定时每天执行callback函数 package main
+
+import (
+
+    "github.com/andy-zhangtao/gogather/zlog"
+    "github.com/sirupsen/logrus"
+    "github.com/andy-zhangtao/gogather/time"
+
+)
+
+var z *zlog.Zlog
+
+func callback() error {
+
+    logrus.WithFields(z.Fields(logrus.Fields{"from": "callback"})).Info("callback")
+    return nil
+
+}
+
+func main() {
+
+    z = zlog.GetZlog()
+
+    time.OnTimer(time.OnDay, 1, callback)
+
+} ```
 
 #### type Ztime
 
