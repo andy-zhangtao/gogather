@@ -42,10 +42,8 @@ func main() {
 
 	time.OnTimer(time.OnDay, 1, callback)
 }
+
 ```
-
-
-
 */
 func OnTimer(kind, duration int, callback func() error) (chan error) {
 	var next time.Time

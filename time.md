@@ -68,7 +68,9 @@ func main() {
 
     time.OnTimer(time.OnDay, 1, callback)
 
-} ```
+}
+
+```
 
 #### type Ztime
 
