@@ -14,3 +14,11 @@ func TestZlog_Error(t *testing.T) {
 
 	assert.EqualError(t, err, "_track [a_custom_track_id] sample error")
 }
+
+func TestZlog_MyTrack(t *testing.T) {
+	z := GetZlog()
+
+	id := z.MyTrack()
+
+	assert.Equal(t, 12, len(id))
+}
