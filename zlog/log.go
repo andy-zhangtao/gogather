@@ -3,6 +3,8 @@ package zlog
 import (
 	"github.com/petermattis/goid"
 	"github.com/andy-zhangtao/gogather/random"
+	"errors"
+	"fmt"
 )
 
 type Zlog struct {
@@ -55,4 +57,8 @@ func (this *Zlog) MyTrack() (string) {
 //Clean 清除跟踪ID
 func (this *Zlog) Clean() {
 	delete(this.idMap, goid.Get())
+}
+
+func (this *Zlog) Error(str string) error {
+	return errors.New(fmt.Sprintf("_track [%s] %s", this.idMap[goid.Get()], str))
 }

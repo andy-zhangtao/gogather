@@ -43,6 +43,12 @@ func (this *Zlog) Clean()
 ```
 Clean 清除跟踪ID
 
+#### func (*Zlog) Error
+
+```go
+func (this *Zlog) Error(str string) error
+```
+
 #### func (*Zlog) Fields
 
 ```go
