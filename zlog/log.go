@@ -51,7 +51,14 @@ func (this *Zlog) AddID(id string) (*Zlog) {
 
 //MyTrack 获取当前跟踪ID
 func (this *Zlog) MyTrack() (string) {
-	return this.idMap[goid.Get()]
+	_id := goid.Get()
+	if id := this.idMap[_id]; id == "" {
+		this.idMap[_id] = random.GetString(12)
+		return this.idMap[_id]
+	} else {
+		return id
+	}
+
 }
 
 //Clean 清除跟踪ID
