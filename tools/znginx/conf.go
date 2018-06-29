@@ -4,7 +4,6 @@ import (
 	"regexp"
 	"strings"
 	"bufio"
-	"errors"
 	"fmt"
 )
 
@@ -104,7 +103,7 @@ func MergeServerF1(nginx1, nginx2 string, nginxs ...string) (nginx string, isMer
 	host2 := ExtractHosts(nginx2)
 
 	if len(host1) > 1 || len(host2) > 1 {
-		err = errors.New(fmt.Sprintf("MergeServerF1 Only Merge Single Domain Server"))
+		fmt.Sprintf("MergeServerF1 Only Merge Single Domain Server [%s] [%s] ", strings.Join(host1, " "), strings.Join(host2, " "))
 		return
 	}
 
@@ -131,8 +130,8 @@ func MergeServerF1(nginx1, nginx2 string, nginxs ...string) (nginx string, isMer
 	for _, n := range nginxs {
 		host := ExtractHosts(n)
 		if len(host) > 1 {
-			err = errors.New(fmt.Sprintf("MergeServerF1 Only Merge Single Domain Server"))
-			return
+			fmt.Sprintf("MergeServerF1 Only Merge Single Domain Server [%s]", strings.Join(host, " "))
+			continue
 		}
 
 		if host1[0] == host[0] {
