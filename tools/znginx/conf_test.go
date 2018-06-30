@@ -245,3 +245,94 @@ server {
 	assert.EqualValues(t, 3, len(locMap["www.chinazt.cc"]))
 
 }
+
+func TestExtractByComment(t *testing.T) {
+	var nginx = `
+### [ups] start ###
+upstream tomcats9540 {
+    server 192.168.1.216:8000;
+}
+### [ups] end ###
+
+#admin
+server {
+	server_name  www.chinazt.cc;
+	
+	### [location] start ###
+	location / {
+		index index.html index.htm index.jsp;
+		proxy_pass         http://tomcats9540;
+		proxy_redirect     off;
+		proxy_set_header   Host             $host;
+		proxy_set_header   X-Real-IP        $remote_addr;
+		proxy_set_header  X-Forwarded-For  $proxy_add_x_forwarded_for;
+		client_max_body_size       10m;
+		client_body_buffer_size    128k;
+		proxy_connect_timeout      90;
+		proxy_send_timeout         90;
+		proxy_read_timeout         90;
+		proxy_buffer_size          4k;
+		proxy_buffers              4 32k;
+		proxy_busy_buffers_size    64k;
+		proxy_temp_file_write_size 64k;
+	}
+	### [location] end ###
+}
+`
+
+	content, err := ExtractByComment(nginx, "### [ups] start ###", "### [ups] end ###")
+	assert.Nil(t, err)
+	assert.EqualValues(t, 3, len(content))
+
+	content, err = ExtractByComment(nginx, "### [ups] start ###")
+	assert.Error(t, err)
+	assert.EqualValues(t, 0, len(content))
+
+	content, err = ExtractByComment(nginx, "### [ups] start ###", "### [ups] end ###", "### [location] start ###", "### [location] end ###")
+	assert.Nil(t, err)
+	assert.EqualValues(t, 20, len(content))
+}
+
+func TestExtractAndReplaceByComment(t *testing.T) {
+	var nginx = `
+### [ups] start ###
+upstream tomcats9540 {
+    server 192.168.1.216:8000;
+}
+### [ups] end ###
+
+#admin
+server {
+	server_name  www.chinazt.cc;
+	
+	### [location] start ###
+	location / {
+		index index.html index.htm index.jsp;
+		proxy_pass         http://tomcats9540;
+		proxy_redirect     off;
+		proxy_set_header   Host             $host;
+		proxy_set_header   X-Real-IP        $remote_addr;
+		proxy_set_header  X-Forwarded-For  $proxy_add_x_forwarded_for;
+		client_max_body_size       10m;
+		client_body_buffer_size    128k;
+		proxy_connect_timeout      90;
+		proxy_send_timeout         90;
+		proxy_read_timeout         90;
+		proxy_buffer_size          4k;
+		proxy_buffers              4 32k;
+		proxy_busy_buffers_size    64k;
+		proxy_temp_file_write_size 64k;
+	}
+	### [location] end ###
+}
+`
+	replace := []string{
+		"upstream tomcats9540 {",
+		"server 192.168.1.222:8000;",
+		"}",
+	}
+
+	isReplace, _, err := ExtractAndReplaceByComment(nginx, replace, "### [ups] start ###", "### [ups] end ###")
+	assert.Nil(t, err)
+	assert.EqualValues(t, true, isReplace)
+}

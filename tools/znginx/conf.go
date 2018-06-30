@@ -5,6 +5,7 @@ import (
 	"strings"
 	"bufio"
 	"fmt"
+	"errors"
 )
 
 //ExtractHosts 从nginx server片段中抽取domain
@@ -156,4 +157,114 @@ func MergeServerF1(nginx1, nginx2 string, nginxs ...string) (nginx string, isMer
 
 	nginx += "\n#Auto Merge By GoGather \n"
 	return
+}
+
+//ExtractByComment 提取指定注释间的数据
+//comment必须成对出现。即 comment-start, comment-end, comment-start, comment-end...
+//具体使用方式可参考conf_test.go中的实例代码
+func ExtractByComment(nginx string, comment ...string) (content []string, err error) {
+	if len(comment)%2 != 0 {
+		err = errors.New("comment must be pairing. start, end, start, end ...")
+		return
+	}
+
+	for i := 0; i < len(comment); i = i + 2 {
+		_, _c := extractByComment(nginx, comment[i], comment[i+1])
+		content = append(content, _c ...)
+	}
+
+	return
+}
+
+//ExtractAndReplaceByComment 替换指定注释之间的数据, 仅支持替换一个注释区间的数据
+//replace 准备替换的文件内容
+func ExtractAndReplaceByComment(nginx string, replace []string, comment ...string, ) (isReplace bool, newNginx string, err error) {
+	if len(comment)%2 != 0 {
+		err = errors.New("comment must be pairing. start, end, start, end ...")
+		return
+	}
+
+	var line []int
+	for i := 0; i < len(comment); i = i + 2 {
+		_l, _ := extractByComment(nginx, comment[i], comment[i+1])
+		line = append(line, _l...)
+	}
+
+	newNginx = replaceNginxContent(nginx, line, replace)
+
+	return !(nginx == newNginx), newNginx, nil
+}
+
+// extractByComment 提取指定注释之间的数据
+// nginx 配置数据内容
+// comment1 注释起始内容
+// comment2 注释结束内容
+// 如果提取到内容，则返回内容在nginx数据中的行数，同时返回所提取到的数据。 例如:
+// nginx:
+// 15. ### [comment-start] ###
+// 16. upstream {
+// 17. 	server 127.0.0.1;
+// 18. }
+// 19. ### [comment-end] ###
+// 则返回line=[16,17,18]. content=["upstream {","server 127.0.0.1;","}"]
+// 返回的content保留原始格式
+func extractByComment(nginx, comment1, comment2 string) (line []int, content []string) {
+	scanner := bufio.NewScanner(strings.NewReader(nginx))
+
+	findContent := false
+	idx := 0
+	for scanner.Scan() {
+		idx++
+		if strings.HasPrefix(strings.TrimSpace(scanner.Text()), "#") && strings.Contains(scanner.Text(), comment1) {
+			findContent = true
+			continue
+		}
+
+		if strings.HasPrefix(strings.TrimSpace(scanner.Text()), "#") && strings.Contains(scanner.Text(), comment2) {
+			return
+		}
+
+		if findContent {
+			line = append(line, idx)
+			content = append(content, scanner.Text())
+		}
+
+	}
+
+	return
+}
+
+// replaceNginxContent 替换Nginx指定行号的内容. 此函数会将content内容插入在line[0]的位置上
+// nginx 数据源
+// line 准备要修改的行号
+// content 替换数据源
+// 操作时会将指定行号的内容删除，然后替换content的数据
+// 因此content的数据量不必和行号相等
+// 最后返回新的nginx数据.
+func replaceNginxContent(nginx string, line []int, content []string) (newNginx string) {
+	_lineMap := make(map[int]int)
+	for _, l := range line {
+		_lineMap[l] = l
+	}
+
+	scanner := bufio.NewScanner(strings.NewReader(nginx))
+
+	hasReplace := false
+	idx := 0
+	for scanner.Scan() {
+		idx++
+
+		if _, ok := _lineMap[idx]; ok {
+			if !hasReplace {
+				for _, c := range content {
+					newNginx += c + "\n"
+				}
+				hasReplace = true
+			}
+		} else {
+			newNginx += scanner.Text() + "\n"
+		}
+	}
+
+	return newNginx
 }
