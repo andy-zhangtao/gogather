@@ -25,3 +25,19 @@ func Reverse(src, seg string) string {
 func ReverseWithSeg(src, oldSeg, newSeg string) string {
 	return strings.Replace(Reverse(src, oldSeg), oldSeg, newSeg, -1)
 }
+
+// ReplaceAscii 替换src当中指定的字符串类型的控制字符
+// 例如将 字符串类型的"\n"替换成 Ascii的 10(LF)
+func ReplaceAscii(src string, seg []string) string {
+
+	for _, s := range seg {
+		switch s {
+		case "\\n":
+			src = strings.Replace(src, "\\n", "\n", -1)
+		case "\\t":
+			src = strings.Replace(src, "\\t", "\t", -1)
+		}
+	}
+
+	return src
+}
