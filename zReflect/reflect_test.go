@@ -4,7 +4,7 @@ import (
 	"testing"
 	"gopkg.in/mgo.v2/bson"
 	"github.com/stretchr/testify/assert"
-	)
+)
 
 //Write by zhangtao<ztao8607@gmail.com> . In 2018/5/23.
 type User struct {
@@ -14,7 +14,7 @@ type User struct {
 	Projects         Project       `json:"projects,omitempty" bson:"projects"`
 	Statis           UserStatis    `json:"statis,omitempty" bson:"statis" bw:"statis"`
 	CurrentAuthority string        `json:"currentAuthority,omitempty" bson:"currentauthority"`
-	Resource struct {
+	Resource         struct {
 		Cpu    float64 `json:"cpu" bson:"cpu" bw:"cpu"`
 		Memory float64 `json:"memory" bson:"memory"`
 	} `json:"resource omitempty" bson:"resource"`
@@ -70,11 +70,28 @@ func TestReflectStructInfoWithTag(t *testing.T) {
 		CurrentAuthority: "dev",
 	}
 
-	structInfo := ReflectStructInfoWithTag(u, true,"bw")
+	structInfo := ReflectStructInfoWithTag(u, true, "bw")
 
 	assert.Equal(t, "andy@gmail.com", structInfo["name"])
 	assert.Equal(t, "pbkdf2_sha256$12000$sYPLrXcUlw0r$lNZsiNWBHS/9DUNsYvKYtL1UjxUPv+IKaYJ5JMJtz9U=", structInfo["password"])
 	assert.Equal(t, nil, structInfo["projects.id"])
 	assert.Equal(t, 4, structInfo["statis.deployfailed"].(int))
 	assert.Equal(t, nil, structInfo["currentauthority"])
+}
+
+func TestExtractValuePtrFromStruct(t *testing.T) {
+	type User struct {
+		Name string `json:"name" bw:"name"`
+		Age  int    `json:"age" bw:"age"`
+		Addr string `json:"addr"`
+	}
+
+	var fileds = []string{
+		"name", "age", "addr",
+	}
+	u := new(User)
+	vals, err := ExtractValuePtrFromStruct(u, fileds)
+
+	assert.Nil(t, err)
+	assert.EqualValues(t, 3, len(vals))
 }
