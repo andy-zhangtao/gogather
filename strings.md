@@ -20,6 +20,13 @@ func RemoveMultipeSpace(oldStr string) (newStr string)
 ```
 RemoveMultipeSpace 去除字符串中多余的空格
 
+#### func  ReplaceAscii
+
+```go
+func ReplaceAscii(src string, seg []string) string
+```
+ReplaceAscii 替换src当中指定的字符串类型的控制字符 例如将 字符串类型的"\n"替换成 Ascii的 10(LF)
+
 #### func  Reverse
 
 ```go

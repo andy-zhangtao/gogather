@@ -5,6 +5,33 @@
 
 ## Usage
 
+#### func  ExtractValuePtrFromStruct
+
+```go
+func ExtractValuePtrFromStruct(uPtr interface{}, fields []string) (valPtr []interface{}, err error)
+```
+ExtractValuePtrFromStruct 从给定的结构体中根据给定的字段名称抽取出实际的字段内存地址 uPtr必须为指针类型
+fields是字段名称,执行抽取操作时会对名称首字母进行大写处理。如: 给定的字段名称是name，实际比对的是Name.
+如果找不到对应的字段，则跳过此字段继续往下查找。 依靠返回的valPtr是无法得知具体哪些字段查找成功，因此在使用此函数时必须确保fields名称的准确性
+
+Example:
+
+```go
+
+    type User struct {
+    	Name string `json:"name" bw:"name"`
+    	Age  int    `json:"age" bw:"age"`
+    	Addr string `json:"addr"`
+    }
+
+    var fileds = []string{
+    	"name", "age", "addr",
+    }
+    u := new(User)
+    vals, err := ExtractValuePtrFromStruct(u, fileds)
+
+```
+
 #### func  ReflectStructInfo
 
 ```go
