@@ -5,6 +5,35 @@
 
 ## Usage
 
+#### func  CopyDir
+
+```go
+func CopyDir(src, dst string) (err error)
+```
+CopyDir copies a dir from src to dst. src should be a full path. Also dst too.
+If src is a file, then will invoke CopyFile. If src is a dir, then will copy all
+the files it contains to dst. * ##### Example
+
+```go package main
+
+import (
+
+    "github.com/andy-zhangtao/gogather/tools"
+    "fmt"
+
+)
+
+func main() {
+
+    err := tools.CopyDir("/Users/zhangtao/SourceCode/golang/go/src/temp/test", "/tmp/test")
+    if err != nil {
+    	fmt.Println(err)
+    }
+
+}
+
+```
+
 #### func  CopyFile
 
 ```go

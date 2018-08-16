@@ -5,6 +5,7 @@ import (
 	"io"
 	"fmt"
 	"os"
+	"io/ioutil"
 )
 
 //Write by zhangtao<ztao8607@gmail.com> . In 2018/3/30.
@@ -28,6 +29,73 @@ func LineCounter(r io.Reader) (int, error) {
 			return count, err
 		}
 	}
+}
+
+// CopyDir copies a dir from src to dst.
+// src should be a full path. Also dst too.
+// If src is a file, then will invoke CopyFile.
+// If src is a dir, then will copy all the files it contains to dst.
+/**
+##### Example
+
+```go
+package main
+
+import (
+	"github.com/andy-zhangtao/gogather/tools"
+	"fmt"
+)
+
+func main() {
+	err := tools.CopyDir("/Users/zhangtao/SourceCode/golang/go/src/temp/test", "/tmp/test")
+	if err != nil {
+		fmt.Println(err)
+	}
+}
+
+```
+*/
+func CopyDir(src, dst string) (err error) {
+
+	fi, err := os.Stat(src)
+	if err != nil {
+		return
+	}
+
+	switch mode := fi.Mode(); {
+	case mode.IsDir():
+		return copyDir(src, dst)
+	case mode.IsRegular():
+		return CopyFile(src, dst)
+	}
+	return
+}
+
+func copyDir(src, dst string) (err error) {
+	if _, err := os.Stat(dst); os.IsNotExist(err) {
+		os.Mkdir(dst, 0777)
+	}
+
+	files, err := ioutil.ReadDir(src)
+	if err != nil {
+		return
+	}
+
+	for _, f := range files {
+		var err error
+		switch mode := f.Mode(); {
+		case mode.IsDir():
+			err = copyDir(fmt.Sprintf("%s/%s", src, f.Name()), fmt.Sprintf("%s/%s", dst, f.Name()))
+		case mode.IsRegular():
+			err = CopyFile(fmt.Sprintf("%s/%s", src, f.Name()), fmt.Sprintf("%s/%s", dst, f.Name()))
+		}
+
+		if err != nil {
+			return err
+		}
+	}
+
+	return
 }
 
 // CopyFile copies a file from src to dst. If src and dst files exist, and are
