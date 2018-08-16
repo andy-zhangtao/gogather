@@ -85,13 +85,28 @@ type Ztime struct {
 ```go
 func (this *Ztime) AddHour(n int) *Ztime
 ```
-AddHour 调整时间
+AddHour 以小时为单位调整时间
 
 ##### Example
 
 ```go
 
     new(Ztime).Now().SetLocation("Asia/Shanghai").AddHour(-1).Format("2006-01-02T15:04")
+
+```
+
+#### func (*Ztime) AddMinute
+
+```go
+func (this *Ztime) AddMinute(n int) *Ztime
+```
+AddMinute 以分钟为单位调整时间
+
+##### Example
+
+```go
+
+    new(Ztime).Now().SetLocation("Asia/Shanghai").AddMinute(-1).Format("2006-01-02T15:04")
 
 ```
 

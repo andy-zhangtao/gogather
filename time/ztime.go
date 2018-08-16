@@ -3,7 +3,7 @@ package time
 import (
 	"time"
 	"strings"
-	)
+)
 
 type Ztime struct {
 	time time.Time
@@ -72,7 +72,7 @@ func (this *Ztime) String() (string, error) {
 	return this.time.String(), this.err
 }
 
-//AddHour 调整时间
+//AddHour 以小时为单位调整时间
 /*
 
 ##### Example
@@ -83,6 +83,20 @@ func (this *Ztime) String() (string, error) {
 */
 func (this *Ztime) AddHour(n int) (*Ztime) {
 	this.time = this.time.Add(time.Duration(n) * time.Hour)
+	return this
+}
+
+//AddMinute 以分钟为单位调整时间
+/*
+
+##### Example
+
+```go
+	new(Ztime).Now().SetLocation("Asia/Shanghai").AddMinute(-1).Format("2006-01-02T15:04")
+```
+*/
+func (this *Ztime) AddMinute(n int) (*Ztime) {
+	this.time = this.time.Add(time.Duration(n) * time.Minute)
 	return this
 }
 
