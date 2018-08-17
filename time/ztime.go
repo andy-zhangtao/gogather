@@ -3,6 +3,7 @@ package time
 import (
 	"time"
 	"strings"
+	"strconv"
 )
 
 type Ztime struct {
@@ -112,4 +113,18 @@ func (this *Ztime) AddMinute(n int) (*Ztime) {
 func (this *Ztime) UTC() (*Ztime) {
 	this.time = this.time.UTC()
 	return this
+}
+
+// UnixNano 获取Unix纳秒级的时间戳
+// lenth返回时间戳长度 length<=13
+/*
+#### Example
+
+```
+	t := time.Ztime{}
+	fmt.Println(t.Now().UnixNano(13))
+```
+ */
+func (this *Ztime) UnixNano(length int) string {
+	return strconv.FormatInt(this.time.UTC().UnixNano(), 10)[:length]
 }
