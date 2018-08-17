@@ -157,3 +157,19 @@ UTC 返回UTC时间 在当前没有时区文件的场景中可以通过UTC+AddHo
     new(Ztime).Now().UTC()
 
 ```
+
+#### func (*Ztime) UnixNano
+
+```go
+func (this *Ztime) UnixNano(length int) string
+```
+UnixNano 获取Unix纳秒级的时间戳 lenth返回时间戳长度 length<=13
+
+#### Example
+
+```
+
+    t := time.Ztime{}
+    fmt.Println(t.Now().UnixNano(13))
+
+```
