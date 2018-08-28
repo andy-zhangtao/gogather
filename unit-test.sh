@@ -1,3 +1,3 @@
 #!/bin/sh
 
-dep init ; dep ensure -v
+dep init ; dep ensure -v; go test -v ./...
