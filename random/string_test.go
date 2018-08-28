@@ -1,10 +1,8 @@
 package random
 
 import (
-	"testing"
 	"strconv"
-	"github.com/stretchr/testify/assert"
-	"strings"
+	"testing"
 )
 
 func TestGetString(t *testing.T) {
@@ -25,21 +23,20 @@ func TestGetString(t *testing.T) {
 
 func TestGetRandom(t *testing.T) {
 	randNum1 := GetRandom(10)
-	if len(randNum1) != 10{
+	if len(randNum1) != 10 {
 		t.Error("Random String Generate Length Error!")
 	}
 
-	if _, err := strconv.Atoi(randNum1); err != nil{
+	if _, err := strconv.Atoi(randNum1); err != nil {
 		t.Error("Random String Generate Number Error!")
 	}
 
 	randNum2 := GetRandom(6)
-	if len(randNum2) != 6{
+	if len(randNum2) != 6 {
 		t.Error("Random String Generate Length Error!")
 	}
 
-	if _, err := strconv.Atoi(randNum2); err != nil{
+	if _, err := strconv.Atoi(randNum2); err != nil {
 		t.Error("Random String Generate Number Error!")
 	}
 }
-
