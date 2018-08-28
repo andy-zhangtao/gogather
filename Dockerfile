@@ -1,8 +1,10 @@
 FROM golang:1.10-alpine3.7
 LABEL MAINTAINER=ztao@gmail.com
 RUN		apk update && \
-		apk add git expect curl && \
-		go get -u github.com/golang/dep/cmd/dep
+		apk add git expect curl tzdata && \
+		go get -u github.com/golang/dep/cmd/dep && \
+		cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
+        echo "Asia/Shanghai" > /etc/timezone
 RUN mkdir -p /go/src/github.com/andy-zhangtao/gogather
 COPY unit-test.sh /go/src/github.com/andy-zhangtao/gogather/unit-test.sh
 ADD convert  /go/src/github.com/andy-zhangtao/gogather/convert
