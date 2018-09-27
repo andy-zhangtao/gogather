@@ -69,7 +69,7 @@ func OnTimer(kind, duration int, callback func() error) (chan error) {
 		}
 
 		t := time.NewTimer(next.Sub(now))
-		fmt.Printf("下次采集时间为[%s]\n", next.Format("20060102150400"))
+		fmt.Printf("下次采集时间为[%s]\n", next.Format("20060102150405"))
 
 		select {
 		case <-t.C:
