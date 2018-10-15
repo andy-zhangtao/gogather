@@ -1,20 +1,22 @@
 package time
 
 import (
-	"time"
 	"fmt"
+	"time"
 )
 
 const (
 	OnDay = iota
 	OnHour
 	OnMin
+	OnSecond
 )
 
 //OnTimer 定时发生器
 //OnDay 每天零时执行callback
 //OnHour 每个小时执行callback
 //OnMin 每分钟执行callback
+//OnSecond 每秒钟执行callback
 //如果执行过程出现error, 则通过chan error获取具体错误原因
 /*
 
@@ -61,10 +63,13 @@ func OnTimer(kind, duration int, callback func() error) (chan error) {
 		case OnMin:
 			next = now.Add(time.Second * time.Duration(duration*60))
 			next = time.Date(next.Year(), next.Month(), next.Day(), next.Hour(), next.Minute(), 0, 0, next.Location())
+		case OnSecond:
+			next = now.Add(time.Millisecond * time.Duration(duration*1000))
+			next = time.Date(next.Year(), next.Month(), next.Day(), next.Hour(), next.Minute(), next.Second(), 0, next.Location())
 		}
 
 		t := time.NewTimer(next.Sub(now))
-		fmt.Printf("下次采集时间为[%s]\n", next.Format("200601021504"))
+		fmt.Printf("下次采集时间为[%s]\n", next.Format("20060102150405"))
 
 		select {
 		case <-t.C:

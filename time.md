@@ -10,6 +10,7 @@ const (
 	OnDay = iota
 	OnHour
 	OnMin
+	OnSecond
 )
 ```
 
@@ -39,7 +40,7 @@ GetTimeStamp 获取当前时间戳 length 10:获取秒 13:获取毫秒
 func OnTimer(kind, duration int, callback func() error) chan error
 ```
 OnTimer 定时发生器 OnDay 每天零时执行callback OnHour 每个小时执行callback OnMin 每分钟执行callback
-如果执行过程出现error, 则通过chan error获取具体错误原因
+OnSecond 每秒钟执行callback 如果执行过程出现error, 则通过chan error获取具体错误原因
 
 ##### Example
 
