@@ -2,8 +2,9 @@ package strings
 
 import (
 	"errors"
-	"strings"
+	"fmt"
 	"regexp"
+	"strings"
 )
 
 // SymExstact 对称截取. 从src中截取sym1与sym2之间的字符
@@ -101,6 +102,48 @@ func DouExstact(src string, sym string) ([]string, error) {
 
 }
 
+// DouExstactReplace 标准替换, 从src中按照指定的sym进行提取，并从value中获取相对应的val
+// 替换到指定位置
+func DouExstactReplace(src string, sym string, value map[string]interface{}) (string, error) {
+	count := strings.Count(src, sym)
+
+	if count == 1 {
+		return src, errors.New("The src string must have more than one split char")
+	}
+
+	var result string
+
+	isSym := true
+	ids1 := strings.Index(src, sym)
+	sub := src[ids1+1:]
+	result = src[:ids1]
+
+	for {
+		if !strings.Contains(sub, sym) {
+			result += sub
+			break
+		}
+
+		ids2 := strings.Index(sub, sym)
+		if isSym {
+			//发现另外一个分隔符
+			str := sub[:ids2]
+			sub = sub[ids2+1:]
+
+			//使用替换后的值
+			result += fmt.Sprintf("%v", value[str])
+
+			isSym = !isSym
+		} else {
+			result += sub[:ids2]
+			sub = sub[ids2+1:]
+
+			isSym = !isSym
+		}
+
+	}
+	return result, nil
+}
 
 // RemoveMultipeSpace 去除字符串中多余的空格
 func RemoveMultipeSpace(oldStr string) (newStr string) {
