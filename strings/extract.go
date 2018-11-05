@@ -105,6 +105,8 @@ func DouExstact(src string, sym string) ([]string, error) {
 // DouExstactReplace 标准替换, 从src中按照指定的sym进行提取，并从value中获取相对应的val
 // 替换到指定位置
 func DouExstactReplace(src string, sym string, value map[string]interface{}) (string, error) {
+	symLen := len(sym)
+
 	count := strings.Count(src, sym)
 
 	if count == 1 {
@@ -115,7 +117,7 @@ func DouExstactReplace(src string, sym string, value map[string]interface{}) (st
 
 	isSym := true
 	ids1 := strings.Index(src, sym)
-	sub := src[ids1+1:]
+	sub := src[ids1+symLen:]
 	result = src[:ids1]
 
 	for {
@@ -128,7 +130,7 @@ func DouExstactReplace(src string, sym string, value map[string]interface{}) (st
 		if isSym {
 			//发现另外一个分隔符
 			str := sub[:ids2]
-			sub = sub[ids2+1:]
+			sub = sub[ids2+symLen:]
 
 			//使用替换后的值
 			result += fmt.Sprintf("%v", value[str])
@@ -136,7 +138,7 @@ func DouExstactReplace(src string, sym string, value map[string]interface{}) (st
 			isSym = !isSym
 		} else {
 			result += sub[:ids2]
-			sub = sub[ids2+1:]
+			sub = sub[ids2+symLen:]
 
 			isSym = !isSym
 		}

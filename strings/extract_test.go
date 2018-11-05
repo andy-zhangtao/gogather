@@ -199,4 +199,11 @@ func TestDouExstactReplace(t *testing.T) {
 
 	assert.Nil(t, err)
 	assert.Equal(t, "window.webpackJsonp=window.WEBPACKJsonp||[]).push([[1],Array(20000).concat([function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},FUNCTION(e,t,n)", str1)
+
+	oldStr = "window.webpackJsonp=window.|+|webpack|+|Jsonp||[]).|+|push|+|,Array(|+|size|+|).concat([function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},|+|function|+|(e,t,n)"
+
+	str1, err = DouExstactReplace(oldStr, "|+|", value)
+
+	assert.Nil(t, err)
+	assert.Equal(t, "window.webpackJsonp=window.WEBPACKJsonp||[]).push([[1],Array(20000).concat([function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},FUNCTION(e,t,n)", str1)
 }
