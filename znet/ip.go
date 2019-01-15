@@ -1,6 +1,7 @@
 package znet
 
 import (
+	"encoding/hex"
 	"errors"
 	"fmt"
 	"net"
@@ -56,13 +57,14 @@ func ConvertToHex(ip string) (ipHex []byte, err error) {
 		return
 	}
 
+	var _is string
 	for _, i := range _ips {
 		_i, err := strconv.Atoi(i)
 		if err != nil {
 			return ipHex, err
 		}
-		ipHex = append(ipHex, []byte(fmt.Sprintf("%02X", _i))...)
+		_is += fmt.Sprintf("%02X", _i)
 	}
 
-	return
+	return hex.DecodeString(_is)
 }

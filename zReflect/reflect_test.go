@@ -1,9 +1,9 @@
 package zReflect
 
 import (
-	"testing"
-	"gopkg.in/mgo.v2/bson"
 	"github.com/stretchr/testify/assert"
+	"gopkg.in/mgo.v2/bson"
+	"testing"
 )
 
 //Write by zhangtao<ztao8607@gmail.com> . In 2018/5/23.
@@ -18,6 +18,7 @@ type User struct {
 		Cpu    float64 `json:"cpu" bson:"cpu" bw:"cpu"`
 		Memory float64 `json:"memory" bson:"memory"`
 	} `json:"resource omitempty" bson:"resource"`
+	UserID int64 `json:"user_id" bson:"user_id"`
 }
 
 type UserStatis struct {
@@ -44,6 +45,7 @@ func TestReflectStructInfo(t *testing.T) {
 			DeployFailed: 4,
 		},
 		CurrentAuthority: "dev",
+		UserID:           1024,
 	}
 
 	structInfo := ReflectStructInfo(u)
@@ -53,6 +55,7 @@ func TestReflectStructInfo(t *testing.T) {
 	assert.Equal(t, "iddd", structInfo["projects.id"].([]string)[0])
 	assert.Equal(t, 4, structInfo["statis.deployfailed"].(int))
 	assert.Equal(t, "dev", structInfo["currentauthority"])
+	assert.Equal(t, int64(1024), structInfo["user_id"])
 }
 
 func TestReflectStructInfoWithTag(t *testing.T) {

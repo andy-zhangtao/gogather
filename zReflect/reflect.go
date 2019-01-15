@@ -1,8 +1,8 @@
 package zReflect
 
 import (
-	"reflect"
 	"errors"
+	"reflect"
 	"strings"
 )
 
@@ -137,6 +137,12 @@ func parseStruct(u reflect.Type, v reflect.Value, allowEmpty bool, tag string, k
 			case reflect.String:
 				fallthrough
 			case reflect.Int:
+				fallthrough
+			case reflect.Int8:
+				fallthrough
+			case reflect.Int32:
+				fallthrough
+			case reflect.Int64:
 				fallthrough
 			case reflect.Bool:
 				fallthrough

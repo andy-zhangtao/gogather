@@ -1,10 +1,10 @@
 package strings
 
 import (
+	"github.com/stretchr/testify/assert"
 	"log"
 	"strings"
 	"testing"
-	"github.com/stretchr/testify/assert"
 )
 
 func TestStdSymExstact(t *testing.T) {
@@ -170,4 +170,40 @@ func TestRemoveMultipeSpace(t *testing.T) {
 	assert.Equal(t, r, str, "They should be equal")
 	strs := strings.Split(str, " ")
 	assert.Equal(t, 5, len(strs), "The length of strs should be 5")
+}
+
+func TestDouExstactReplace(t *testing.T) {
+	value := map[string]interface{}{
+		"webpack":  "WEBPACK",
+		"size":     20000,
+		"function": "FUNCTION",
+		"push":     "push([[1]",
+	}
+
+	oldStr := "window.webpackJsonp=window.#webpack#Jsonp||[]).push([[1],Array(#size#).concat([function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n)"
+	str1, err := DouExstactReplace(oldStr, "#", value)
+
+	assert.Nil(t, err)
+	assert.Equal(t, "window.webpackJsonp=window.WEBPACKJsonp||[]).push([[1],Array(20000).concat([function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n)", str1)
+
+	oldStr = "window.webpackJsonp=window.#webpack#Jsonp||[]).push([[1],Array(#size#).concat([function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},#function#(e,t,n)"
+
+	str1, err = DouExstactReplace(oldStr, "#", value)
+
+	assert.Nil(t, err)
+	assert.Equal(t, "window.webpackJsonp=window.WEBPACKJsonp||[]).push([[1],Array(20000).concat([function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},FUNCTION(e,t,n)", str1)
+
+	oldStr = "window.webpackJsonp=window.#webpack#Jsonp||[]).#push#,Array(#size#).concat([function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},#function#(e,t,n)"
+
+	str1, err = DouExstactReplace(oldStr, "#", value)
+
+	assert.Nil(t, err)
+	assert.Equal(t, "window.webpackJsonp=window.WEBPACKJsonp||[]).push([[1],Array(20000).concat([function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},FUNCTION(e,t,n)", str1)
+
+	oldStr = "window.webpackJsonp=window.|+|webpack|+|Jsonp||[]).|+|push|+|,Array(|+|size|+|).concat([function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},|+|function|+|(e,t,n)"
+
+	str1, err = DouExstactReplace(oldStr, "|+|", value)
+
+	assert.Nil(t, err)
+	assert.Equal(t, "window.webpackJsonp=window.WEBPACKJsonp||[]).push([[1],Array(20000).concat([function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},function(e,t,n){},FUNCTION(e,t,n)", str1)
 }

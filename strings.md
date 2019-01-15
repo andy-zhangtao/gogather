@@ -13,6 +13,13 @@ func DouExstact(src string, sym string) ([]string, error)
 ```
 DouExstact 标准截取. 从src中按照指定的sym进行截取sym之间的字符 例如从#ABC#abc#DEF#中截取出 ABC和DEF
 
+#### func  DouExstactReplace
+
+```go
+func DouExstactReplace(src string, sym string, value map[string]interface{}) (string, error)
+```
+DouExstactReplace 标准替换, 从src中按照指定的sym进行提取，并从value中获取相对应的val 替换到指定位置
+
 #### func  RemoveMultipeSpace
 
 ```go
