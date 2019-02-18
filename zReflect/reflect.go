@@ -132,35 +132,41 @@ func parseStruct(u reflect.Type, v reflect.Value, allowEmpty bool, tag string, k
 			bName = key[0] + bName
 		}
 
-		if !reflect.DeepEqual(zero.Interface(), value.Interface()) || allowEmpty {
-			switch reflect.TypeOf(value.Interface()).Kind() {
-			case reflect.String:
-				fallthrough
-			case reflect.Int:
-				fallthrough
-			case reflect.Int8:
-				fallthrough
-			case reflect.Int32:
-				fallthrough
-			case reflect.Int64:
-				fallthrough
-			case reflect.Bool:
-				fallthrough
-			case reflect.Array:
-				fallthrough
-			case reflect.Slice:
-				fallthrough
-			case reflect.Map:
-				fallthrough
-			case reflect.Float32:
-				fallthrough
-			case reflect.Float64:
-				structInfo[bName] = value.Interface()
-			case reflect.Struct:
-				for k, v := range ReflectStructInfo(value.Interface(), bName+".") {
-					structInfo[k] = v
+		switch reflect.TypeOf(value.Interface()).Kind() {
+		case reflect.Bool:
+			structInfo[bName] = value.Interface()
+		default:
+			if !reflect.DeepEqual(zero.Interface(), value.Interface()) || allowEmpty {
+				switch reflect.TypeOf(value.Interface()).Kind() {
+				case reflect.String:
+					fallthrough
+				case reflect.Int:
+					fallthrough
+				case reflect.Int8:
+					fallthrough
+				case reflect.Int16:
+					fallthrough
+				case reflect.Int32:
+					fallthrough
+				case reflect.Int64:
+					fallthrough
+				case reflect.Bool:
+					fallthrough
+				case reflect.Array:
+					fallthrough
+				case reflect.Slice:
+					fallthrough
+				case reflect.Map:
+					fallthrough
+				case reflect.Float32:
+					fallthrough
+				case reflect.Float64:
+					structInfo[bName] = value.Interface()
+				case reflect.Struct:
+					for k, v := range ReflectStructInfo(value.Interface(), bName+".") {
+						structInfo[k] = v
+					}
 				}
-
 			}
 		}
 	}

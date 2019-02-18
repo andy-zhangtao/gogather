@@ -19,6 +19,7 @@ type User struct {
 		Memory float64 `json:"memory" bson:"memory"`
 	} `json:"resource omitempty" bson:"resource"`
 	UserID int64 `json:"user_id" bson:"user_id"`
+	Enable bool  `json:"enable" bson:"enable" bw:"enable"`
 }
 
 type UserStatis struct {
@@ -46,6 +47,7 @@ func TestReflectStructInfo(t *testing.T) {
 		},
 		CurrentAuthority: "dev",
 		UserID:           1024,
+		Enable:           false,
 	}
 
 	structInfo := ReflectStructInfo(u)
@@ -56,6 +58,7 @@ func TestReflectStructInfo(t *testing.T) {
 	assert.Equal(t, 4, structInfo["statis.deployfailed"].(int))
 	assert.Equal(t, "dev", structInfo["currentauthority"])
 	assert.Equal(t, int64(1024), structInfo["user_id"])
+	assert.Equal(t, false, structInfo["enable"])
 }
 
 func TestReflectStructInfoWithTag(t *testing.T) {
@@ -71,6 +74,7 @@ func TestReflectStructInfoWithTag(t *testing.T) {
 			DeployFailed: 4,
 		},
 		CurrentAuthority: "dev",
+		Enable:           true,
 	}
 
 	structInfo := ReflectStructInfoWithTag(u, true, "bw")
@@ -80,6 +84,7 @@ func TestReflectStructInfoWithTag(t *testing.T) {
 	assert.Equal(t, nil, structInfo["projects.id"])
 	assert.Equal(t, 4, structInfo["statis.deployfailed"].(int))
 	assert.Equal(t, nil, structInfo["currentauthority"])
+	assert.Equal(t, true, structInfo["enable"])
 }
 
 func TestExtractValuePtrFromStruct(t *testing.T) {
