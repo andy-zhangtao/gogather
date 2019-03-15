@@ -286,6 +286,88 @@ server {
 
 }
 
+func TestExtractLocationDestProxyPass(t *testing.T) {
+	var nginx = `
+	upstream tomcats9542 {
+	   server 192.168.1.211:8000;
+	}
+
+
+	#admin
+	server {
+		server_name  www.chinazt.cc;
+
+		location ~* /logout {
+			index index.html index.htm index.jsp;
+			proxy_pass         http://tomcats9542;
+			proxy_redirect     off;
+			proxy_set_header   Host             $host;
+			proxy_set_header   X-Real-IP        $remote_addr;
+			proxy_set_header  X-Forwarded-For  $proxy_add_x_forwarded_for;
+			client_max_body_size       10m;
+			client_body_buffer_size    128k;
+			proxy_connect_timeout      90;
+			proxy_send_timeout         90;
+			proxy_read_timeout         90;
+			proxy_buffer_size          4k;
+			proxy_buffers              4 32k;
+			proxy_busy_buffers_size    64k;
+			proxy_temp_file_write_size 64k;
+		}
+	}
+	`
+
+	location := ExtractLocation(nginx)
+	assert.Equal(t, 1, len(location))
+
+	dest, isroot := ExtractLocationDest(location["www.chinazt.cc"][0])
+
+	assert.Equal(t, false, isroot)
+
+	assert.Equal(t, "http://tomcats9542", dest)
+}
+
+func TestExtractLocationDestRoot(t *testing.T) {
+	var nginx = `
+	upstream tomcats9542 {
+	   server 192.168.1.211:8000;
+	}
+
+
+	#admin
+	server {
+		server_name  www.chinazt.cc;
+
+		location ~* /logout {
+			index index.html index.htm index.jsp;
+			root         /var/www/root;
+			proxy_redirect     off;
+			proxy_set_header   Host             $host;
+			proxy_set_header   X-Real-IP        $remote_addr;
+			proxy_set_header  X-Forwarded-For  $proxy_add_x_forwarded_for;
+			client_max_body_size       10m;
+			client_body_buffer_size    128k;
+			proxy_connect_timeout      90;
+			proxy_send_timeout         90;
+			proxy_read_timeout         90;
+			proxy_buffer_size          4k;
+			proxy_buffers              4 32k;
+			proxy_busy_buffers_size    64k;
+			proxy_temp_file_write_size 64k;
+		}
+	}
+	`
+
+	location := ExtractLocation(nginx)
+	assert.Equal(t, 1, len(location))
+
+	dest, isroot := ExtractLocationDest(location["www.chinazt.cc"][0])
+
+	assert.Equal(t, true, isroot)
+
+	assert.Equal(t, "/var/www/root", dest)
+}
+
 func TestExtractByComment(t *testing.T) {
 	var nginx = `
 ### [ups] start ###

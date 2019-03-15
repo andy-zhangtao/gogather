@@ -74,6 +74,33 @@ func ExtractUpstream(nginx string) (upstream []string) {
 	return
 }
 
+// ExtractLocationDest 从location片段中提取root或者proxy_pass地址
+// 通过isroot返回dest类型
+func ExtractLocationDest(nginx string) (dest string, isroot bool) {
+	location, err := zstrings.SymExstact(nginx, "{", "}")
+	if err != nil {
+		return
+	}
+
+	// location应该只有一个元素
+	for _, l := range location {
+		for _, d := range strings.Split(l, ";") {
+			if strings.Contains(d, "root") {
+				isroot = true
+				dest = strings.TrimSpace(strings.SplitN(d, "root", 2)[1])
+				return
+			}
+
+			if strings.Contains(d, "proxy_pass") {
+				dest = strings.TrimSpace(strings.SplitN(d, "proxy_pass", 2)[1])
+				return
+			}
+		}
+	}
+
+	return
+}
+
 //ExtractLocation 从nginx server片段中抽取domain和location的映射数据
 func ExtractLocation(nginx string) (location map[string][]string) {
 	hosts := ExtractHosts(nginx)
@@ -93,7 +120,7 @@ func extractLocation(nginx string) (location []string) {
 	scanner := bufio.NewScanner(strings.NewReader(nginx))
 
 	hasLoc := false
-	var loc string = ""
+	var loc string
 
 	for scanner.Scan() {
 		if strings.Contains(scanner.Text(), "location") {
