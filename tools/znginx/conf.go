@@ -75,8 +75,10 @@ func ExtractUpstream(nginx string) (upstream []string) {
 }
 
 // ExtractLocationDest 从location片段中提取root或者proxy_pass地址
-// 通过isroot返回dest类型
-func ExtractLocationDest(nginx string) (dest string, isroot bool) {
+// 通过isroot返回dest类型,同时返回location地址
+func ExtractLocationDest(nginx string) (dest string, isroot bool, loc string) {
+	_loc := strings.Split(nginx, "{")
+	loc = strings.TrimSpace(strings.Split(_loc[0], "location")[1])
 	location, err := zstrings.SymExstact(nginx, "{", "}")
 	if err != nil {
 		return
