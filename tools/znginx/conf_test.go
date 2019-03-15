@@ -152,6 +152,42 @@ upstream tomcats9541 {
 	assert.Equal(t, 2, len(ups))
 }
 
+func TestExtractLocation1(t *testing.T) {
+	var nginx = `http {
+		include	/home/eqs/soft/nginx/conf/mime.types;
+		default_type  application/octet-stream;
+		server_tokens off;
+
+		include common-log.conf;
+
+		sendfile	on;
+		#tcp_nopush     on;
+
+		keepalive_timeout  65;
+
+		client_max_body_size 32M;
+
+		proxy_buffering		on;
+		proxy_buffer_size	4k;
+		proxy_buffers		512 4k;
+		proxy_busy_buffers_size	64k;
+		proxy_cache_path	/data/eqs/proxy_cache levels=1:2 keys_zone=cache:300m inactive=24h max_size=10g use_temp_path=off;
+
+		gzip	on;
+		gzip_min_length	1k;
+		gzip_buffers	4 16k;
+		gzip_comp_level	2;
+		gzip_types	text/plain text/css text/javascript application/json application/javascript application/x-javascript application/xml;
+		gzip_vary	off;
+		upstream ups-caas {
+			server 192.168.0.18:80 max_fails=2 fail_timeout=5s weight=10;
+		}
+		include conf.d/*.conf;
+	}`
+
+	location := ExtractLocation(nginx)
+	assert.Equal(t, 0, len(location))
+}
 func TestExtractLocation(t *testing.T) {
 	var nginx = `
 upstream tomcats9540 {

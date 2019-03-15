@@ -15,7 +15,7 @@ import (
 func ExtractHosts(nginx string) (hosts []string) {
 	re := regexp.MustCompile("server_name(.*);")
 	h := re.FindStringSubmatch(nginx)
-	if len(h) == 1 {
+	if len(h) <= 1 {
 		return
 	}
 
