@@ -320,10 +320,10 @@ func TestExtractLocationDestProxyPass(t *testing.T) {
 	location := ExtractLocation(nginx)
 	assert.Equal(t, 1, len(location))
 
-	dest, isroot := ExtractLocationDest(location["www.chinazt.cc"][0])
+	dest, isroot, loc := ExtractLocationDest(location["www.chinazt.cc"][0])
 
 	assert.Equal(t, false, isroot)
-
+	assert.Equal(t, "~* /logout", loc)
 	assert.Equal(t, "http://tomcats9542", dest)
 }
 
@@ -361,10 +361,10 @@ func TestExtractLocationDestRoot(t *testing.T) {
 	location := ExtractLocation(nginx)
 	assert.Equal(t, 1, len(location))
 
-	dest, isroot := ExtractLocationDest(location["www.chinazt.cc"][0])
+	dest, isroot, loc := ExtractLocationDest(location["www.chinazt.cc"][0])
 
 	assert.Equal(t, true, isroot)
-
+	assert.Equal(t, "~* /logout", loc)
 	assert.Equal(t, "/var/www/root", dest)
 }
 
