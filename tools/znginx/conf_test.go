@@ -2,8 +2,9 @@ package znginx
 
 import (
 	"testing"
+
 	"github.com/stretchr/testify/assert"
-	)
+)
 
 func TestExtractHosts(t *testing.T) {
 	var nginx = `
@@ -33,7 +34,7 @@ server {
 		proxy_temp_file_write_size 64k;
 	}
 }
-	
+
 `
 
 	hosts := ExtractHosts(nginx)
@@ -41,6 +42,45 @@ server {
 	assert.Equal(t, 2, len(hosts))
 	assert.EqualValues(t, "www.chinazt.cc", hosts[0])
 	assert.EqualValues(t, "blog.chinazt.cc", hosts[1])
+}
+
+func TestExtraceUpstreamValue(t *testing.T) {
+	var nginx = `
+	upstream tomcats9540 {
+		server 192.168.1.216:8000;
+		server 192.168.1.216:9000;
+	}
+
+
+	#admin
+	server {
+		server_name  www.chinazt.cc  blog.chinazt.cc;
+
+		location / {
+			index index.html index.htm index.jsp;
+			proxy_pass         http://tomcats9540;
+			proxy_redirect     off;
+			proxy_set_header   Host             $host;
+			proxy_set_header   X-Real-IP        $remote_addr;
+			proxy_set_header  X-Forwarded-For  $proxy_add_x_forwarded_for;
+			client_max_body_size       10m;
+			client_body_buffer_size    128k;
+			proxy_connect_timeout      90;
+			proxy_send_timeout         90;
+			proxy_read_timeout         90;
+			proxy_buffer_size          4k;
+			proxy_buffers              4 32k;
+			proxy_busy_buffers_size    64k;
+			proxy_temp_file_write_size 64k;
+		}
+	}
+	`
+	ups := ExtractUpstream(nginx)
+	server, err := ExtractUpstreamValue(ups[0])
+	assert.Nil(t, err)
+	assert.Equal(t, 2, len(server))
+	assert.Equal(t, "192.168.1.216:8000", server[0])
+	assert.Equal(t, "192.168.1.216:9000", server[1])
 }
 
 func TestExtractUpstream(t *testing.T) {
@@ -204,12 +244,12 @@ server {
 	upstream tomcats9542 {
 	   server 192.168.1.211:8000;
 	}
-	
-	
+
+
 	#admin
 	server {
 		server_name  www.chinazt.cc;
-	
+
 		location ~* /logout {
 			index index.html index.htm index.jsp;
 			proxy_pass         http://tomcats9542;
@@ -257,7 +297,7 @@ upstream tomcats9540 {
 #admin
 server {
 	server_name  www.chinazt.cc;
-	
+
 	### [location] start ###
 	location / {
 		index index.html index.htm index.jsp;
@@ -304,7 +344,7 @@ upstream tomcats9540 {
 #admin
 server {
 	server_name  www.chinazt.cc;
-	
+
 	### [location] start ###
 	location / {
 		index index.html index.htm index.jsp;

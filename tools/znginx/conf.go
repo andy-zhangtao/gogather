@@ -1,11 +1,13 @@
 package znginx
 
 import (
+	"bufio"
+	"errors"
+	"fmt"
 	"regexp"
 	"strings"
-	"bufio"
-	"fmt"
-	"errors"
+
+	zstrings "github.com/andy-zhangtao/gogather/strings"
 )
 
 //ExtractHosts 从nginx server片段中抽取domain
@@ -26,13 +28,32 @@ func ExtractHosts(nginx string) (hosts []string) {
 	return
 }
 
+// ExtractUpstreamValue 提取Upstream中的ServerName数据
+func ExtractUpstreamValue(upstream string) (server []string, err error) {
+	serverData, err := zstrings.SymExstact(upstream, "{", "}")
+	if err != nil {
+		return
+	}
+
+	// 应该只有一行数据才对
+	for _, s := range serverData {
+		list := strings.Split(s, ";")
+		for _, l := range list {
+			if strings.TrimSpace(l) != "" {
+				server = append(server, strings.TrimSpace(strings.Split(l, "server")[1]))
+			}
+		}
+	}
+	return
+}
+
 //ExtractUpstream 从nginx server片段中抽取upstream片段
 //nginx server片段
 func ExtractUpstream(nginx string) (upstream []string) {
 	scanner := bufio.NewScanner(strings.NewReader(nginx))
 
 	hasUps := false
-	var ups string = ""
+	var ups string
 
 	for scanner.Scan() {
 		if strings.Contains(scanner.Text(), "upstream") {
@@ -170,7 +191,7 @@ func ExtractByComment(nginx string, comment ...string) (content []string, err er
 
 	for i := 0; i < len(comment); i = i + 2 {
 		_, _c := extractByComment(nginx, comment[i], comment[i+1])
-		content = append(content, _c ...)
+		content = append(content, _c...)
 	}
 
 	return
@@ -178,7 +199,7 @@ func ExtractByComment(nginx string, comment ...string) (content []string, err er
 
 //ExtractAndReplaceByComment 替换指定注释之间的数据, 仅支持替换一个注释区间的数据
 //replace 准备替换的文件内容
-func ExtractAndReplaceByComment(nginx string, replace []string, comment ...string, ) (isReplace bool, newNginx string, err error) {
+func ExtractAndReplaceByComment(nginx string, replace []string, comment ...string) (isReplace bool, newNginx string, err error) {
 	if len(comment)%2 != 0 {
 		err = errors.New("comment must be pairing. start, end, start, end ...")
 		return
