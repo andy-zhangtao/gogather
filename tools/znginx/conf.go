@@ -39,7 +39,7 @@ func ExtractUpstreamValue(upstream string) (server []string, err error) {
 	for _, s := range serverData {
 		list := strings.Split(s, ";")
 		for _, l := range list {
-			if strings.TrimSpace(l) != "" {
+			if strings.TrimSpace(l) != "" && strings.Contains(l, "server") {
 				server = append(server, strings.TrimSpace(strings.Split(l, "server")[1]))
 			}
 		}
