@@ -82,7 +82,35 @@ func TestExtraceUpstreamValue(t *testing.T) {
 	assert.Equal(t, "192.168.1.216:8000", server[0])
 	assert.Equal(t, "192.168.1.216:9000", server[1])
 }
+func TestExtractUpstream1(t *testing.T) {
+	var nginx = `### [5bdfe6df67609d000a5e5c4b]-[/]-[upstream]-[start]
+	upstream 5bdfe6df67609d000a5e5c4b {
+		server  192.168.1.237:8000;
+	}
+	### [5bdfe6df67609d000a5e5c4b]-[/]-[upstream]-[end]
 
+	server{
+
+		server_name qa.tiny.eqshow.cn;
+
+
+
+
+		location / {
+			proxy_pass http://5bdfe6df67609d000a5e5c4b;
+			proxy_set_header X-Real-IP $remote_addr;
+			proxy_set_header Host $host;
+			proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+
+
+
+		}
+
+	}`
+
+	ups := ExtractUpstream(nginx)
+	assert.Equal(t, 1, len(ups))
+}
 func TestExtractUpstream(t *testing.T) {
 	var nginx = `
 upstream tomcats9540 {

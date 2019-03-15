@@ -56,15 +56,16 @@ func ExtractUpstream(nginx string) (upstream []string) {
 	var ups string
 
 	for scanner.Scan() {
-		if strings.Contains(scanner.Text(), "upstream") {
+		str := strings.TrimSpace(scanner.Text())
+		if strings.Contains(str, "upstream") && strings.HasPrefix(str, "upstream") {
 			hasUps = true
-			ups = scanner.Text() + "\n"
+			ups = str + "\n"
 			continue
 		}
 
 		if hasUps {
-			ups += scanner.Text() + "\n"
-			if strings.Contains(scanner.Text(), "}") {
+			ups += str + "\n"
+			if strings.Contains(str, "}") {
 				hasUps = false
 				upstream = append(upstream, ups)
 			}
