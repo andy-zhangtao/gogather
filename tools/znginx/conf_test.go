@@ -44,12 +44,12 @@ server {
 	assert.EqualValues(t, "blog.chinazt.cc", hosts[1])
 }
 
-
 func TestExtraceUpstreamValue(t *testing.T) {
 	var nginx = `
 	upstream tomcats9540 {
 		server 192.168.1.216:8000;
 		server 192.168.1.216:9000;
+		# server 192.168.1.216:9000;
 	}
 
 
