@@ -5,6 +5,13 @@
 
 ## Usage
 
+#### func  ConvertIP
+
+```go
+func ConvertIP(iphex string) (ip string, err error)
+```
+ConvertIP 将网络字节序的IP地址转换成人可识别的IP地址
+
 #### func  ConvertToHex
 
 ```go
